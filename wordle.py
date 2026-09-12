@@ -1,6 +1,5 @@
 import random
 
-NAME = "WORDLE 42"
 NUMBER_OF_GUESSES = 6
 WORD_SIZE = 5
 WHITE = 0
@@ -26,6 +25,7 @@ def print_in_colors(character, state):
 	print(COLOR_DICTIONARY[state] + character + ANSI_RESET, end="")
 
 def print_current_state(guess, guess_state):
+	print(ANSI_CLEAR, end="")
 	for i in range(WORD_SIZE):
 		print_in_colors(guess[i], guess_state[i])
 	print("")
@@ -67,10 +67,8 @@ def update_current_state(word, guess):
 def guess_word(wordlist, word):
 	guess = input("")
 	while guess not in wordlist:
-		print(ANSI_CLEAR, end="")
-		print(ANSI_RED + guess + ANSI_RESET)
+		print(ANSI_CLEAR + ANSI_RED + guess + ANSI_RESET)
 		guess = input("")
-	print(ANSI_CLEAR, end="")
 	guess_state = update_current_state(word, guess)
 	return guess, guess_state
 
