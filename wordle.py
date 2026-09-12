@@ -1,48 +1,67 @@
 import random
-from parse import parse_dictionary
 
-def index_is_already_marked(secret_word, word, guess_state, index):
-	k = 0
-	while k < 5:
-		if guess_state[k] == index:
-			return 1
-		k = k + 1
-	return 0
+NAME = "WORDLE 42"
+NUMBER_OF_GUESSES = 6
+WORD_SIZE = 5
+WHITE = 0
+GREEN = 1
+YELLOW = 2
+GREY = 3
+ANSI_GREEN = "\033[32m"
+ANSI_ORANGE = "\033[33m"
+ANSI_RESET = "\033[0m"
+ANSI_CLEAR = "\033[2K\r"
 
-def guess_word(secret_word, word):
-	guess_state = [-1]*5
-	tuple_list = list(zip(secret_word, word))
+def parse_dictionary(path):
+	with open(path, 'r') as file:
+		content = file.read()
+	wordlist = content.split()
+	return wordlist
+
+def game_is_complete(guess_state):
+	for i in range(WORD_SIZE):
+		if guess_state[i] != GREEN:
+			return 0
+	return 1
+
+def guess_word(wordlist, word):
+	guess = input("")
+	while guess not in wordlist:
+		print("This word is not in the dictionary")
+		guess = input("")
+	guess_state = [WHITE] * WORD_SIZE
+	word_state = [WHITE] * WORD_SIZE
+	tuple_list = list(zip(word, guess))
 	i = 0
 	for tuple in tuple_list:
 		if (tuple[0] == tuple[1]):
-			guess_state[i] = -2
+			guess_state[i] = GREEN
+			word_state[i] = GREEN
 		i = i + 1
-	for i in range(5):
-		if guess_state[i] == -1:
-			for j in range(5):
-				print("comparing %c with %c", secret_word[j], word[i])
-				if guess_state[j] == -1 and secret_word[j] == word[i]:
-					guess_state[i] = j
-	return guess_state
+	for i in range(WORD_SIZE):
+		if guess_state[i] != GREEN:
+			for j in range(WORD_SIZE):
+				if word_state[j] == WHITE:
+					if word[j] == guess[i]:					
+						guess_state[i] = YELLOW
+						word_state[j] = YELLOW
+	for i in range(WORD_SIZE):
+		if guess_state[i] == WHITE:
+			guess_state[i] == GREY
+	return guess, guess_state
 
 if __name__ == "__main__":
-	content = parse_dictionary("../words.txt")
-	wordlist = content.split()
-	guess_count = 6
-	game_won = 0
-	secret_word = random.choice(wordlist)
-	print(secret_word)
-	while guess_count > 0:
-		word = input("")
-		guess_state = guess_word(secret_word, word)
-		# print_guess_state(guess_state)
-		# if check_game_completion(guess_state):
-		# 	game_won = 1
-		# 	break
+	wordlist = parse_dictionary("words.txt")
+	word = random.choice(wordlist)
+	print(word)
+	counter = NUMBER_OF_GUESSES
+	print("Enter a word:")
+	while counter > 0:
+		print_current_state(*guess_word(wordlist, word))
 		print("guess_state_array is:")
 		for i in range(5):
 			print(guess_state[i], end=" ")
 		print("")
-		guess_count = guess_count - 1
-	if game_won:
-		print("You won")
+		if game_is_complete(guess_state):
+			break
+		counter = counter - 1
