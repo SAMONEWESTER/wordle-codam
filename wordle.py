@@ -10,7 +10,7 @@ ANSI_RED = "\033[31m"
 ANSI_WHITE = "\033[37m"
 ANSI_GREEN = "\033[32m"
 ANSI_YELLOW = "\033[38;5;214m"
-ANSI_GREY = "\033[38;5;250m"
+ANSI_GREY = "\033[38;5;247m"
 ANSI_RESET = "\033[0m"
 ANSI_CLEAR = "\033[1A\033[2K\r"
 
@@ -61,7 +61,7 @@ def update_current_state(word, guess):
 						word_state[j] = YELLOW
 	for i in range(WORD_SIZE):
 		if guess_state[i] == WHITE:
-			guess_state[i] == GREY
+			guess_state[i] = GREY
 	return guess_state
 
 def guess_word(wordlist, word):
