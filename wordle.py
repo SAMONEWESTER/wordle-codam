@@ -7,10 +7,28 @@ WHITE = 0
 GREEN = 1
 YELLOW = 2
 GREY = 3
+ANSI_RED = "\033[31m"
+ANSI_WHITE = "\033[37m"
 ANSI_GREEN = "\033[32m"
-ANSI_ORANGE = "\033[33m"
+ANSI_YELLOW = "\033[38;5;214m"
+ANSI_GREY = "\033[38;5;250m"
 ANSI_RESET = "\033[0m"
-ANSI_CLEAR = "\033[2K\r"
+ANSI_CLEAR = "\033[1A\033[2K\r"
+
+COLOR_DICTIONARY = {
+	WHITE: ANSI_WHITE,
+	GREEN: ANSI_GREEN,
+	YELLOW: ANSI_YELLOW,
+	GREY: ANSI_GREY
+}
+
+def print_in_colors(character, state):
+	print(COLOR_DICTIONARY[state] + character + ANSI_RESET, end="")
+
+def print_current_state(guess, guess_state):
+	for i in range(WORD_SIZE):
+		print_in_colors(guess[i], guess_state[i])
+	print("")
 
 def parse_dictionary(path):
 	with open(path, 'r') as file:
@@ -24,11 +42,7 @@ def game_is_complete(guess_state):
 			return 0
 	return 1
 
-def guess_word(wordlist, word):
-	guess = input("")
-	while guess not in wordlist:
-		print("This word is not in the dictionary")
-		guess = input("")
+def update_current_state(word, guess):
 	guess_state = [WHITE] * WORD_SIZE
 	word_state = [WHITE] * WORD_SIZE
 	tuple_list = list(zip(word, guess))
@@ -48,20 +62,26 @@ def guess_word(wordlist, word):
 	for i in range(WORD_SIZE):
 		if guess_state[i] == WHITE:
 			guess_state[i] == GREY
+	return guess_state
+
+def guess_word(wordlist, word):
+	guess = input("")
+	while guess not in wordlist:
+		print(ANSI_CLEAR, end="")
+		print(ANSI_RED + guess + ANSI_RESET)
+		guess = input("")
+	print(ANSI_CLEAR, end="")
+	guess_state = update_current_state(word, guess)
 	return guess, guess_state
 
 if __name__ == "__main__":
 	wordlist = parse_dictionary("words.txt")
 	word = random.choice(wordlist)
-	print(word)
+	# print(word)
 	counter = NUMBER_OF_GUESSES
-	print("Enter a word:")
 	while counter > 0:
-		print_current_state(*guess_word(wordlist, word))
-		print("guess_state_array is:")
-		for i in range(5):
-			print(guess_state[i], end=" ")
-		print("")
+		guess, guess_state = guess_word(wordlist, word)
+		print_current_state(guess, guess_state)
 		if game_is_complete(guess_state):
 			break
 		counter = counter - 1
