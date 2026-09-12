@@ -59,6 +59,7 @@ def update_current_state(word, guess):
 					if word[j] == guess[i]:					
 						guess_state[i] = YELLOW
 						word_state[j] = YELLOW
+						break # missing break was causing the loop to mark more indexes than needed
 	for i in range(WORD_SIZE):
 		if guess_state[i] == WHITE:
 			guess_state[i] = GREY
