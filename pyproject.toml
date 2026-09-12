@@ -1,0 +1,11 @@
+[project]
+name = "wordle-game"
+version = "0.1.0"
+description = "A Wordle clone with a pygame visualizer"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "pygame>=2.6",
+]
+
+[tool.uv]
+package = false
