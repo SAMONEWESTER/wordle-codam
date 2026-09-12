@@ -74,10 +74,20 @@ class Board:
         ]
         self.square_size: int = MIN_SQUARE_SIZE
 
-    def layout(self, window_size: tuple[int, int], top_margin: int) -> None:
-        """Recompute every square's rect to fit the current window."""
+    def layout(
+        self,
+        window_size: tuple[int, int],
+        top_margin: int,
+        bottom_margin: int = 0,
+    ) -> None:
+        """Recompute every square's rect to fit the current window.
+
+        top_margin and bottom_margin reserve space above and below
+        the grid (for header text and the Retry/Quit buttons) so the
+        grid itself never grows into that space.
+        """
         width, height = window_size
-        available_height = max(height - top_margin, 1)
+        available_height = max(height - top_margin - bottom_margin, 1)
 
         size_for_width = self._fit(width * WIDTH_USE_RATIO, WORD_LENGTH)
         size_for_height = self._fit(

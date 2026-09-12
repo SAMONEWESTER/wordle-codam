@@ -20,6 +20,9 @@ TOP_MARGIN = 90
 BUTTON_SIZE = (120, 44)
 BUTTON_GAP = 20
 BUTTON_TOP_GAP = 30
+BUTTON_BOTTOM_PADDING = 20
+BOTTOM_MARGIN = BUTTON_TOP_GAP + BUTTON_SIZE[1] + BUTTON_BOTTOM_PADDING
+SIDE_PADDING = 10
 
 WORD_LIST_PATH = "words.txt"
 HIGH_SCORE_PATH = "highscore.json"
@@ -65,6 +68,7 @@ def build_buttons(
     button_width, button_height = BUTTON_SIZE
     total_width = button_width * 2 + BUTTON_GAP
     left = (width - total_width) // 2
+    left = max(SIDE_PADDING, min(left, width - total_width - SIDE_PADDING))
     top = board_bottom + BUTTON_TOP_GAP
 
     retry_rect = pygame.Rect(left, top, button_width, button_height)
@@ -109,7 +113,7 @@ def main() -> None:
     board = Board()
 
     window_size = INITIAL_WINDOW_SIZE
-    board.layout(window_size, TOP_MARGIN)
+    board.layout(window_size, TOP_MARGIN, BOTTOM_MARGIN)
     retry_button, quit_button = build_buttons(window_size, board.bottom)
 
     letter_font_size = board.square_size
@@ -125,7 +129,7 @@ def main() -> None:
                 screen = pygame.display.set_mode(
                     window_size, pygame.RESIZABLE
                 )
-                board.layout(window_size, TOP_MARGIN)
+                board.layout(window_size, TOP_MARGIN, BOTTOM_MARGIN)
                 retry_button, quit_button = build_buttons(
                     window_size, board.bottom
                 )
