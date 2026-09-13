@@ -1,6 +1,7 @@
-from prompt_toolkit import PromptSession
 import random
 import time
+
+from prompt_toolkit import PromptSession
 
 NUMBER_OF_GUESSES = 6
 WORD_SIZE = 5
@@ -31,7 +32,7 @@ def print_current_state(guess, guess_state):
 	print(ANSI_CLEAR, end="")
 	for i in range(WORD_SIZE):
 		print_in_colors(guess[i], guess_state[i])
-	print("")
+	print()
 
 def parse_dictionary(path):
 	with open(path, 'r') as file:
@@ -58,11 +59,10 @@ def update_current_state(word, guess):
 	for i in range(WORD_SIZE):
 		if guess_state[i] != GREEN:
 			for j in range(WORD_SIZE):
-				if word_state[j] == WHITE:
-					if word[j] == guess[i] or word[j] == guess[i].lower():
-						guess_state[i] = YELLOW
-						word_state[j] = YELLOW
-						break # missing break was causing the loop to mark more indexes than needed
+				if word_state[j] == WHITE and word[j] == guess[i] or word[j] == guess[i].lower():
+					guess_state[i] = YELLOW
+					word_state[j] = YELLOW
+					break
 	for i in range(WORD_SIZE):
 		if guess_state[i] == WHITE:
 			guess_state[i] = GREY
@@ -76,9 +76,8 @@ def guess_word(wordlist, word):
 			print(ANSI_DELETE + ANSI_RED + guess + ANSI_RESET, end="")
 			time.sleep(0.3)
 			print(ANSI_DELETE, end="")
-			# guess = session.prompt("")
 			guess = session.prompt("", default=guess)
-	print("")
+	print()
 	guess_state = update_current_state(word, guess)
 	return guess, guess_state
 
