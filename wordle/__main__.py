@@ -12,6 +12,8 @@ import pygame
 from wordle.game import LOST, PLAYING, WON, GameSession, HighScore, WordList
 from wordle.visuals import Board, Button
 
+FPS_COUNT = 60
+
 INITIAL_WINDOW_SIZE = (420, 620)
 BACKGROUND_COLOR = (18, 18, 19)
 MESSAGE_COLOR = (220, 60, 60)
@@ -268,13 +270,6 @@ def run_menu(
                 if event.key == pygame.K_ESCAPE:
                     return None
             elif event.type == pygame.VIDEORESIZE:
-                # The window manager has already resized the actual
-                # window by this point. Calling set_mode() again
-                # here recreates the underlying window, which on
-                # Linux fights with the window manager's live-resize
-                # drag and makes the window flicker and snap back to
-                # its old size. Just pick up the surface SDL already
-                # resized for us instead.
                 window_size = (event.w, event.h)
                 screen = pygame.display.get_surface()
                 metrics = build_metrics(window_size)
@@ -391,7 +386,7 @@ def main() -> None:
             quit_button.draw(screen, fonts.button)
 
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(FPS_COUNT)
 
     pygame.quit()
     sys.exit()
