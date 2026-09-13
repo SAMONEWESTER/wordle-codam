@@ -51,7 +51,7 @@ def update_current_state(word, guess):
 	tuple_list = list(zip(word, guess))
 	i = 0
 	for tuple in tuple_list:
-		if (tuple[0] == tuple[1]):
+		if (tuple[0] == tuple[1] or tuple[0] == tuple[1].lower()):
 			guess_state[i] = GREEN
 			word_state[i] = GREEN
 		i = i + 1
@@ -59,7 +59,7 @@ def update_current_state(word, guess):
 		if guess_state[i] != GREEN:
 			for j in range(WORD_SIZE):
 				if word_state[j] == WHITE:
-					if word[j] == guess[i]:					
+					if word[j] == guess[i] or word[j] == guess[i].lower():
 						guess_state[i] = YELLOW
 						word_state[j] = YELLOW
 						break # missing break was causing the loop to mark more indexes than needed
