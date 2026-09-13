@@ -69,10 +69,14 @@ def update_current_state(word, guess):
 	return guess_state
 
 def guess_word(wordlist, word):
-	guess = input("")
-	while guess not in wordlist:
-		print(ANSI_CLEAR + ANSI_RED + guess + ANSI_RESET)
-		guess = input("")
+	session = PromptSession(erase_when_done=True)
+	guess = session.prompt("")
+	while guess.lower() not in wordlist:
+		print(ANSI_DELETE + ANSI_RED + guess + ANSI_RESET, end="")
+		time.sleep(0.3)
+		print(ANSI_DELETE, end="")
+		guess = session.prompt("")
+	print("")
 	guess_state = update_current_state(word, guess)
 	return guess, guess_state
 
