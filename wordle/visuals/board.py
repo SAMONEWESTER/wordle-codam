@@ -79,12 +79,16 @@ class Board:
         window_size: tuple[int, int],
         top_margin: int,
         bottom_margin: int = 0,
+        max_square_size: int = MAX_SQUARE_SIZE,
     ) -> None:
         """Recompute every square's rect to fit the current window.
 
         top_margin and bottom_margin reserve space above and below
         the grid (for header text and the Retry/Quit buttons) so the
-        grid itself never grows into that space.
+        grid itself never grows into that space. max_square_size lets
+        the caller raise the ceiling on a large window so the board
+        keeps growing along with the rest of the UI instead of
+        plateauing at the default cap.
         """
         width, height = window_size
         available_height = max(height - top_margin - bottom_margin, 1)
@@ -94,7 +98,8 @@ class Board:
             available_height * HEIGHT_USE_RATIO, GUESS_COUNT
         )
         square_size = min(size_for_width, size_for_height)
-        square_size = max(MIN_SQUARE_SIZE, min(MAX_SQUARE_SIZE, square_size))
+        max_square_size = max(MIN_SQUARE_SIZE, max_square_size)
+        square_size = max(MIN_SQUARE_SIZE, min(max_square_size, square_size))
         self.square_size = int(square_size)
 
         gap = int(self.square_size * GAP_RATIO)
