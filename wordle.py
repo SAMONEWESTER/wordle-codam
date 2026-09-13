@@ -1,4 +1,6 @@
+from prompt_toolkit import PromptSession
 import random
+import time
 
 NUMBER_OF_GUESSES = 6
 WORD_SIZE = 5
@@ -12,6 +14,7 @@ ANSI_GREEN = "\033[32m"
 ANSI_YELLOW = "\033[38;5;214m"
 ANSI_GREY = "\033[38;5;247m"
 ANSI_RESET = "\033[0m"
+ANSI_DELETE = "\033[2K\r"
 ANSI_CLEAR = "\033[1A\033[2K\r"
 
 COLOR_DICTIONARY = {
@@ -73,7 +76,7 @@ def guess_word(wordlist, word):
 	guess_state = update_current_state(word, guess)
 	return guess, guess_state
 
-if __name__ == "__main__":
+def main():
 	wordlist = parse_dictionary("words.txt")
 	word = random.choice(wordlist)
 	# print(word)
@@ -84,3 +87,6 @@ if __name__ == "__main__":
 		if game_is_complete(guess_state):
 			break
 		counter = counter - 1
+
+if __name__ == "__main__":
+	main()
