@@ -59,7 +59,9 @@ def update_current_state(word, guess):
 	for i in range(WORD_SIZE):
 		if guess_state[i] != GREEN:
 			for j in range(WORD_SIZE):
-				if word_state[j] == WHITE and word[j] == guess[i] or word[j] == guess[i].lower():
+				if (word_state[j] == WHITE
+					and (word[j] == guess[i] or word[j] == guess[i].lower())
+				):
 					guess_state[i] = YELLOW
 					word_state[j] = YELLOW
 					break
